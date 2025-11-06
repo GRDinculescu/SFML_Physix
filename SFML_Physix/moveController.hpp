@@ -18,6 +18,23 @@ public:
 		return directions;
 	}
 
+	bool isResetPressed() const {
+		return sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R);
+	}
+
+	bool toggleSelected() const {
+		return sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q);
+	}
+
+	bool mouseClick() const {
+		return sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+	}
+
+	sf::Vector2f getMousePositionInWindow(sf::RenderWindow& window) const {
+		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+		return sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+	}
+
 private:
 	MoveController() = default;
 	MoveController(const MoveController&) = delete;

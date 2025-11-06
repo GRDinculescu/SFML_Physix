@@ -20,6 +20,7 @@ public:
 		o.setPosition(newPosition);
 	}
 
+	// Indicates which sides to check for colisions
 	void screenColisions(Entity& o, sf::RenderWindow& window, bool bottom = true, bool top = false, bool left = false, bool right = false) {
 		switch (o.getType())
 		{
@@ -36,6 +37,7 @@ public:
 		}
 	}
 
+	// Circle colision with window borders
 	void circleColision(Circle& o, sf::RenderWindow& window, bool bottom = true, bool top = false, bool left = false, bool right = false) {
 		if (bottom) {
 			sf::Vector2f pos = o.getPosition();
@@ -44,6 +46,33 @@ public:
 			if (pos.y + radius > window.getSize().y) {
 				o.setPosition({ pos.x, window.getSize().y - radius });
 				o.setSpeed({ speed.x, -speed.y * o.getRestitution() });
+			}
+		}
+		if (top) {
+			sf::Vector2f pos = o.getPosition();
+			sf::Vector2f speed = o.getSpeed();
+			float radius = o.getRadius();
+			if (pos.y - radius < 0.f) {
+				o.setPosition({ pos.x, radius });
+				o.setSpeed({ speed.x, -speed.y * o.getRestitution() });
+			}
+		}
+		if (left) {
+			sf::Vector2f pos = o.getPosition();
+			sf::Vector2f speed = o.getSpeed();
+			float radius = o.getRadius();
+			if (pos.x - radius < 0.f) {
+				o.setPosition({ radius, pos.y });
+				o.setSpeed({ -speed.x * o.getRestitution(), speed.y });
+			}
+		}
+		if (right) {
+			sf::Vector2f pos = o.getPosition();
+			sf::Vector2f speed = o.getSpeed();
+			float radius = o.getRadius();
+			if (pos.x + radius > window.getSize().x) {
+				o.setPosition({ window.getSize().x - radius, pos.y });
+				o.setSpeed({ -speed.x * o.getRestitution(), speed.y });
 			}
 		}
 	}

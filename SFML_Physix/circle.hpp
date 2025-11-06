@@ -10,6 +10,7 @@ public:
 		shape.setFillColor(color);
 		shape.setOrigin({ radius, radius });
 		shape.setPosition(pos);
+		shape.setOutlineColor(sf::Color::Green);
 	}
 
 	EntityType getType() const override { return EntityType::CIRCLE; }
@@ -21,6 +22,9 @@ public:
 	void setRadius(float r) { radius = r; shape.setRadius(r); shape.setOrigin({ r,r }); }
 	void setColor(sf::Color color) { this->color = color; shape.setFillColor(color); }
 	void draw(sf::RenderWindow& window) override { window.draw(shape); }
+	void setFillColor(sf::Color color) { shape.setFillColor(color); }
+	void toggleSelection() { shape.setOutlineThickness(shape.getOutlineThickness() != 0 ? 0.f : 3.f); }
+	void setSelection(bool toggle) { shape.setOutlineThickness(toggle ? 3.f : 0.f); }
 
 	void updateShape() { shape.setPosition(pos); }
 	void setPosition(sf::Vector2f newPos) override { Entity::setPosition(newPos); updateShape(); }
