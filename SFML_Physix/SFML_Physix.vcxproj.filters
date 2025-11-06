@@ -27,7 +27,7 @@
     <ClInclude Include="SFML_Physix.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="object.hpp">
+    <ClInclude Include="entity.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="circle.hpp">
@@ -44,7 +44,7 @@
     <ClCompile Include="moveController.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClCompile>
-    <ClCompile Include="physicsSystem.cpp">
+    <ClCompile Include="physicsSystem.hpp">
       <Filter>Archivos de encabezado</Filter>
     </ClCompile>
   </ItemGroup>

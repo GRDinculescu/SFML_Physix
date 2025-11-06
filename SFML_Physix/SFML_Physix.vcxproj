@@ -126,7 +126,7 @@
   <ItemGroup>
     <ClInclude Include="circle.hpp" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="object.hpp" />
+    <ClInclude Include="entity.hpp" />
     <ClInclude Include="rectangle.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SFML_Physix.h" />
@@ -134,7 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="moveController.hpp" />
-    <ClCompile Include="physicsSystem.cpp" />
+    <ClCompile Include="physicsSystem.hpp" />
     <ClCompile Include="SFML_Physix.cpp" />
   </ItemGroup>
   <ItemGroup>
