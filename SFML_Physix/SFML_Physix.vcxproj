@@ -124,17 +124,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="circle.hpp" />
+    <ClInclude Include="circleObject.hpp" />
+    <ClInclude Include="coliderComponent.hpp" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="entity.hpp" />
-    <ClInclude Include="rectangle.hpp" />
+    <ClInclude Include="object.hpp" />
+    <ClInclude Include="physicsComponent.hpp" />
+    <ClInclude Include="renderComponent.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SFML_Physix.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="transformComponent.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="moveController.hpp" />
-    <ClCompile Include="physicsSystem.hpp" />
+    <ClCompile Include="physicsController.hpp" />
     <ClCompile Include="SFML_Physix.cpp" />
   </ItemGroup>
   <ItemGroup>

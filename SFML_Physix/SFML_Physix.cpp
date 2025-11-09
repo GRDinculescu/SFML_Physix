@@ -1,11 +1,10 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "circle.hpp"
-#include "rectangle.hpp"
 #include "moveController.hpp"
-#include "physicsSystem.hpp"
-#include "entity.hpp"
+#include "physicsController.hpp"
+#include "object.hpp"
+#include "circleObject.hpp"
 
 // Constants
 sf::Vector2u WIN_SIZE = {800, 600};
@@ -43,20 +42,20 @@ void printTexts(sf::RenderWindow& win, std::vector<sf::Text>& texts) {
 	}
 }
 
-void debugInfo(sf::RenderWindow& win, Entity& c) {
-	float yHeight = c.getPosition().y;
+void debugInfo(sf::RenderWindow& win, Object& o) {
+	float yHeight = o.getTransform().getPosition().y;
 	float heightFromGrownd = (WIN_SIZE.y - yHeight) / WORLD_DIMENSIONS;
 	sf::Text heightText = getText(font);
 	heightText.setString("Height from ground: " + std::to_string(heightFromGrownd) + "m");
 
 	sf::Text posText = getText(font);
 	posText.setPosition({ 0.f, 25.f });
-	sf::Vector2f position = c.getPosition();
+	sf::Vector2f position = o.getTransform().getPosition();
 	posText.setString("X: " + std::to_string(position.x) + " | Y: " + std::to_string(position.y));
 
 	sf::Text posSpeed = getText(font);
 	posSpeed.setPosition({ 0.f, 50.f });
-	sf::Vector2f speed = c.getSpeed();
+	sf::Vector2f speed = o.getPhysics().getVelocity();
 	float speedMagnitude = std::sqrt(speed.x * speed.x + speed.y * speed.y);
 	posSpeed.setString("X: " + std::to_string(speed.x) + " | Y: " + std::to_string(speed.y) + " | Speed mag: " + std::to_string(speedMagnitude));
 
@@ -65,30 +64,26 @@ void debugInfo(sf::RenderWindow& win, Entity& c) {
 	printTexts(win, texts);
 }
 
-void entityManager(Entity& e, sf::RenderWindow& win) {
-	sf::Vector2f mousePos = mc.getMousePositionInWindow(win);
-	sf::Vector2f entityPos = e.getPosition();
+//void entityManager(Object& e, sf::RenderWindow& win) {
+//	sf::Vector2f mousePos = mc.getMousePositionInWindow(win);
+//	sf::Vector2f entityPos = e.getTransform().getPosition();
+//
+//	if (e.getType() == ObjectType::CIRCLE) {
+//		CircleObject& c = static_cast<CircleObject&>(e);
+//		
+//		float distanceToCenter = std::sqrt(std::powf(mousePos.x - entityPos.x, 2) + std::powf(mousePos.y - entityPos.y, 2));
+//		if (distanceToCenter <= c.getRadius()) {
+//			c.setSelected(true);
+//			c.setSelection(true);
+//		}
+//		else {
+//			c.setSelected(false);
+//			c.setSelection(false);
+//		}
+//	}
+//}
 
-	if (e.getType() == EntityType::CIRCLE) {
-		Circle& c = static_cast<Circle&>(e);
-		
-		float distanceToCenter = std::sqrt(std::powf(mousePos.x - entityPos.x, 2) + std::powf(mousePos.y - entityPos.y, 2));
-		if (distanceToCenter <= c.getRadius()) {
-			c.setSelected(true);
-			c.setSelection(true);
-		}
-		else {
-			c.setSelected(false);
-			c.setSelection(false);
-		}
-	}
-	else if (e.getType() == EntityType::RECTANGLE) {
-		Rectangle& r = static_cast<Rectangle&>(e);
-		// Do something with rectangle r
-	}
-}
-
-void loop(sf::RenderWindow& win, std::vector<std::unique_ptr<Entity>>& entities) {
+void loop(sf::RenderWindow& win, std::vector<std::unique_ptr<Object>>& objects) {
 	// Delta time clock
 	sf::Clock clock;
 	float lastFps = 0;
@@ -107,35 +102,38 @@ void loop(sf::RenderWindow& win, std::vector<std::unique_ptr<Entity>>& entities)
 		// Clear window
 		win.clear();
 
-		// Update and draw entities
+		// Update and draw objects
 		sf::Vector2f dir = mc.getDirections();
 		sf::Vector2f force = {
 			dir.x * MOVE_FORCE * WORLD_DIMENSIONS,
 			dir.y * MOVE_FORCE * WORLD_DIMENSIONS
 		};
 
-		// Update and draw entities
-		for (auto& entity : entities) {
+		// Update and draw objects
+		for (auto& object : objects) {
 			if (mc.isResetPressed()) {
 				// Reset entity position and speed
-				entity->setPosition({ WIN_SIZE.x / 2.f , WIN_SIZE.y / 2.f });
-				entity->setSpeed({ 0.f, 0.f });
+				object->getTransform().setPosition({ WIN_SIZE.x / 2.f , WIN_SIZE.y / 2.f });
+				object->getPhysics().setVelocity({ 0.f, 0.f });
 			}
 
-			if (mc.mouseClick()) {
-				entityManager(*entity, win);
-			}
+			/*if (mc.mouseClick()) {
+				entityManager(*object, win);
+			}*/
 
-			ps.applyForces(*entity, force, GRAVITY * WORLD_DIMENSIONS, deltaTime);
-			ps.screenColisions(*entity, win, true, true, true, true);
+			ps.applyForces(*object, force, GRAVITY * WORLD_DIMENSIONS, deltaTime);
+			ps.screenColisions(*object, win, true, true, true, true);
 			
-			if (entity->isSelected())
-				debugInfo(win, *entity);
+			/*if (object->isSelected())
+				debugInfo(win, *object);*/
 
-			entity->draw(win);
+			if (object->getType() == ObjectType::CIRCLE) {
+				CircleObject* c = dynamic_cast<CircleObject*>(object.get());
+				object->update(win, c->getShape());
+			}
 		}
 
-		//Circle* c = dynamic_cast<Circle*>(entities.at(0).get());
+		//CircleObject* c = dynamic_cast<CircleObject*>(objects.at(0).get());
 		
 
 		//c->setSelected(true);
@@ -146,17 +144,16 @@ void loop(sf::RenderWindow& win, std::vector<std::unique_ptr<Entity>>& entities)
 	}
 }
 
-Circle c; // Circle object
 int main() {
-	c.setColor(sf::Color::Red);
-	c.setMass(0.62f * WORLD_DIMENSIONS);
-	c.setPosition({ WIN_SIZE.x / 2.f , WIN_SIZE.y / 2.f });
-	c.setRestitution(0.8f);
-	c.setRadius(0.12f * WORLD_DIMENSIONS * 2.f);
+	// Create objects vector
+	auto circle = std::make_unique<CircleObject>();
+	circle->getTransform().setScale(sf::Vector2f({0.12f , 0.12f}) * WORLD_DIMENSIONS);
+	circle->getTransform().setPosition(sf::Vector2f({ WIN_SIZE.x / 2.f , WIN_SIZE.y / 2.f }));
+	circle->getPhysics().setMass(1.f * WORLD_DIMENSIONS);
+	circle->getPhysics().setRestitution(0.8f);
 
-	// Create entities vector
-	std::vector<std::unique_ptr<Entity>> entities;
-	entities.push_back(std::make_unique<Circle>(c));
+	std::vector<std::unique_ptr<Object>> objects;
+	objects.push_back(std::move(circle));
 
 	// Load font and create text
 	if (!font.openFromFile("Fonts/SpaceMono.ttf")) {
@@ -169,7 +166,7 @@ int main() {
 	win.setFramerateLimit(60);
 	win.setVerticalSyncEnabled(true);
 	
-	loop(win, entities);
+	loop(win, objects);
 
 	return 0;
 }
