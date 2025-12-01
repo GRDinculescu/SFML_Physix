@@ -15,4 +15,5 @@
 
 ### 3. Optimization
 - [ ] Optimize collisions
+- [ ] Use of multi-thread for render and physics
 - [x] ~~Implement component based entities (Unity style)~~
