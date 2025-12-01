@@ -4,21 +4,17 @@
 
 class PhysicsComponent {
 public:
-	PhysicsComponent(const sf::Vector2f& initialVelocity = {}, float mass = 1.f, float restitution = 1.f)
-		: velocity(initialVelocity), mass(mass), restitution(restitution) {}
-	PhysicsComponent(const PhysicsComponent& other) = default;
+	PhysicsComponent(const sf::Vector2f& initialVelocity = {}, const sf::Vector2f& accelerationVelocity = {},
+		float mass = 1.f, float restitution = 1.f)
+		: velocity(initialVelocity), acceleration(accelerationVelocity), mass(mass), restitution(restitution) { }
 
-	sf::Vector2f getVelocity() const { return velocity; }
-	float getMass() const { return mass; }
-	float getRestitution() const { return restitution; }
+	float getVelocityMagnitude() const { return std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y); }
+	float getAccelerationMagnitude() const { return std::sqrt(acceleration.x * acceleration.x + acceleration.y * acceleration.y); }
 
-	void setVelocity(const sf::Vector2f& newVelocity) { velocity = newVelocity; }
-	void setMass(float newMass) { mass = newMass; }
-	void setRestitution(float newRestitution) { restitution = newRestitution; }
-
-private:
-	sf::Vector2f velocity;
 	float mass;
+	bool isTrigger = false;
+	sf::Vector2f velocity;
+	sf::Vector2f acceleration;
 	float restitution;
 };
 

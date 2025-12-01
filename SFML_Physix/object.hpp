@@ -27,17 +27,6 @@ public:
 	ColiderComponent& getColider() { return colider; }
 	RenderComponent& getRender() { return render; }
 
-	void setTransform(const TransformComponent& newTransform) { transform = newTransform; }
-	void setPhysics(const PhysicsComponent& newPhysics) { physics = newPhysics; }
-	void setColider(const ColiderComponent& newColider) { colider = newColider; }
-	void setRender(const RenderComponent& newRender) { render = newRender; }
-
-	void update(sf::RenderWindow& window, sf::Shape& shape) {
-		shape.setPosition(transform.getPosition());
-		shape.setScale(transform.getScale());
-		render.draw(window, shape);
-	}
-
 	virtual ObjectType getType() const = 0;
 
 private:

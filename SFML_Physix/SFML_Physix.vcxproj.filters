@@ -22,6 +22,9 @@
     <Filter Include="Archivos de encabezado\Controllers">
       <UniqueIdentifier>{6936815c-fcbf-46b4-b4b9-7ae2923414f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Util">
+      <UniqueIdentifier>{1ad28a90-c4d1-4823-848f-f8635073debd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -53,6 +56,18 @@
     </ClInclude>
     <ClInclude Include="circleObject.hpp">
       <Filter>Archivos de encabezado\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="math.hpp">
+      <Filter>Archivos de encabezado\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="drawController.hpp">
+      <Filter>Archivos de encabezado\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.hpp">
+      <Filter>Archivos de encabezado\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="collisionInfo.hpp">
+      <Filter>Archivos de encabezado\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

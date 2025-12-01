@@ -126,7 +126,11 @@
   <ItemGroup>
     <ClInclude Include="circleObject.hpp" />
     <ClInclude Include="coliderComponent.hpp" />
+    <ClInclude Include="collisionInfo.hpp" />
+    <ClInclude Include="debug.hpp" />
+    <ClInclude Include="drawController.hpp" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="math.hpp" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="physicsComponent.hpp" />
     <ClInclude Include="renderComponent.hpp" />
